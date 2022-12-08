@@ -3,12 +3,16 @@ defineProps({
 	to: {
 		type: Object,
 		required: true,
-	}
+	},
 });
 </script>
 
 <template>
-	<i-nav-item :to="to" active-class="-active" class="_border _border-color:primary _text-align:center">
+	<i-nav-item
+		:to="to"
+		active-class="-active"
+		class="_border _border-color:primary _text-align:center"
+	>
 		<slot />
 	</i-nav-item>
 </template>
