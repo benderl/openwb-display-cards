@@ -1,10 +1,13 @@
-<script setup>
-defineProps({
-	to: {
-		type: Object,
-		required: true,
+<script>
+export default {
+	name: "NavItem",
+	props: {
+		to: {
+			type: Object,
+			required: true,
+		},
 	},
-});
+}
 </script>
 
 <template>
