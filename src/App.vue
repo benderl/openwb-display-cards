@@ -1,5 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
+import DateTime from "@/components/DateTime.vue";
 import NavBar from "@/components/NavBar.vue";
 </script>
 
@@ -7,6 +8,8 @@ import NavBar from "@/components/NavBar.vue";
 	<i-layout>
 		<i-layout vertical>
 			<i-layout-aside>
+				<DateTime />
+				<hr />
 				<NavBar />
 			</i-layout-aside>
 
@@ -21,5 +24,11 @@ import NavBar from "@/components/NavBar.vue";
 .layout-aside {
 	----width: 10rem !important;
 	margin-right: 1rem;
+	padding: 0.2rem;
+}
+
+hr {
+	border-color: var(--color--primary);
+	margin: 0.2rem 0;
 }
 </style>

@@ -23,11 +23,9 @@ export default {
 <style scoped>
 .nav-item {
 	margin-bottom: 0.15rem !important;
-	color: var(--color--primary);
 }
 
 .nav-item.-active {
 	background-color: var(--color--primary);
-	color: var(--body--color--dark);
 }
 </style>
