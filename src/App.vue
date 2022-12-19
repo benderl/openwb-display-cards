@@ -28,7 +28,17 @@ export default {
 				reconnectPeriod: 4000,
 			},
 			mqttTopicsToSubscribe: [
-				"openWB/test",
+				"openWB/counter/get/hierarchy",
+				"openWB/counter/set/home_consumption",
+				"openWB/counter/+/get/power",
+				"openWB/bat/config/configured",
+				"openWB/bat/get/power",
+				"openWB/bat/get/soc",
+				"openWB/chargepoint/get/power",
+				"openWB/pv/config/configured",
+				"openWB/pv/get/power",
+				"openWB/chargepoint/+/get/power",
+				"openWB/chargepoint/+/config",
 			],
 			mqttStore: useMqttStore(),
 		};
@@ -52,7 +62,6 @@ export default {
 					"Connection succeeded! ClientId: ",
 					this.client.options.clientId
 				);
-				this.doSubscribe(this.mqttTopicsToSubscribe);
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);
@@ -72,16 +81,16 @@ export default {
 						);
 						myPayload = message.toString();
 					}
-					this.mqttStore.addTopic({
-						topic: topic,
-						payload: myPayload,
-					});
+					this.mqttStore.addTopic(topic, myPayload);
 				} else {
 					this.mqttStore.removeTopic(topic);
 				}
 			});
 		},
 		doSubscribe(topics) {
+			topics.forEach((topic) => {
+				this.mqttStore.initTopic(topic);
+			});
 			this.client.subscribe(topics, {}, (error) => {
 				if (error) {
 					console.error("Subscribe to topics error", error);
@@ -90,6 +99,9 @@ export default {
 			});
 		},
 		doUnsubscribe(topics) {
+			topics.forEach((topic) => {
+				this.mqttStore.removeTopic(topic);
+			});
 			this.client.unsubscribe(topics, (error) => {
 				if (error) {
 					console.error("Unsubscribe error", error);
@@ -99,6 +111,12 @@ export default {
 	},
 	created() {
 		this.createConnection();
+	},
+	mounted() {
+		this.doSubscribe(this.mqttTopicsToSubscribe);
+	},
+	beforeUnmount() {
+		this.doUnsubscribe(this.mqttTopicsToSubscribe);
 	},
 }
 </script>
@@ -120,12 +138,11 @@ export default {
 <style scoped>
 .layout-aside {
 	----width: 10rem !important;
-	margin-right: 1rem;
-	padding: 0.2rem;
+	margin-right: var(--spacing);
 }
 
 hr {
 	border-color: var(--color--primary);
-	margin: 0.2rem 0;
+	margin: var(--spacing) 0;
 }
 </style>

@@ -22,7 +22,8 @@ export default {
 
 <style scoped>
 .nav-item {
-	margin-bottom: 0.15rem !important;
+	margin-bottom: var(--spacing) !important;
+	border-radius: var(--border-radius);
 }
 
 .nav-item.-active {

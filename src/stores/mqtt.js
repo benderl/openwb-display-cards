@@ -58,16 +58,45 @@ export const useMqttStore = defineStore('mqtt', {
 					}, {});
 			};
 		},
+		// getGridId(state) {
+		// 	let hierarchy = state.topics["openWB/counter/get/hierarchy"];
+		// 	console.log("getGridId", hierarchy);
+		// 	if (hierarchy !== undefined) {
+		// 		let index = Object.keys(state.topics["openWB/counter/get/hierarchy"])[0];
+		// 		console.log("getGridId", index, state.topics["openWB/counter/get/hierarchy"][index]);
+		// 		if (state.topics["openWB/counter/get/hierarchy"][index].type == "counter") {
+		// 			return state.topics["openWB/counter/get/hierarchy"][index].id;
+		// 		}
+		// 	}
+		// 	return 0;
+		// },
 	},
 	actions: {
-		addTopic(message) {
-			console.log("addTopic", message);
-			this.topics[message.topic] = message.payload;
+		initTopic(topic, defaultValue = undefined) {
+			if (topic.includes("#") || topic.includes("+")) {
+				console.debug("skipping init of wildcard topic:", topic);
+			} else {
+				this.addTopic(topic, defaultValue);
+			}
+		},
+		addTopic(topic, payload) {
+			console.debug("addTopic", topic, payload);
+			this.topics[topic] = payload;
 		},
 		removeTopic(topic) {
-			delete this.topics[topic];
+			if (topic.includes("#") || topic.includes("+")) {
+				console.debug("expanding wildcard topic for removal:", topic);
+				Object.keys(this.getWildcardTopics(topic)).forEach(
+					(wildcardTopic) => {
+						console.debug("removing wildcardTopic:", wildcardTopic);
+						delete this.topics[wildcardTopic];
+					}
+				);
+			} else {
+				delete this.topics[topic];
+			}
 		},
-		updateTopic(message) {
+		updateTopic(topic, payload, objectPath) {
 			// helper function to update nested objects py path
 			const setPath = (object, path, value) =>
 				path
@@ -81,27 +110,23 @@ export const useMqttStore = defineStore('mqtt', {
 						object
 					);
 
-			if (message.topic in this.topics) {
-				if (message.objectPath != undefined) {
+			if (topic in this.topics) {
+				if (objectPath != undefined) {
 					setPath(
-						this.topics[message.topic],
-						message.objectPath,
-						message.payload
+						this.topics[topic],
+						objectPath,
+						payload
 					);
 				} else {
-					this.topics[message.topic] = message.payload;
+					this.topics[topic] = payload;
 				}
 			} else {
-				console.debug("topic not found: ", message.topic);
+				console.debug("topic not found: ", topic);
 			}
 		},
 		updateState(topic, value, objectPath = undefined) {
 			console.debug("updateState:", topic, value, objectPath);
-			this.updateTopic({
-				topic: topic,
-				objectPath: objectPath,
-				payload: value,
-			});
+			this.updateTopic(topic, value, objectPath);
 		},
 	}
 });
