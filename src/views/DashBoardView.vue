@@ -82,7 +82,8 @@ export default {
 			</template>
 			<spark-line
 				color="var(--color--danger)"
-				:data="[5, 7, 11, 13, 17, 29, 31, 3, 8]"
+				colorNegative="var(--color--success)"
+				:data="[5, 7, 11, 13, 7, 2, -3, -13, 8]"
 			/>
 		</dash-board-card>
 		<dash-board-card color="light">
