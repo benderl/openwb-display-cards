@@ -13,10 +13,10 @@ export default {
 	computed: {
 		gridPower() {
 			let gridId = 0;
-			// gridId = this.mqttStore.getGridId();
-			// if (gridId === undefined) {
-			// 	return "---";
-			// }
+			gridId = this.mqttStore.getGridId;
+			if (gridId === undefined) {
+				return "---";
+			}
 			return this.getValueString(`openWB/counter/${gridId}/get/power`);
 		},
 		homePower() {

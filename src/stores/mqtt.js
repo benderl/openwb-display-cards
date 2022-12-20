@@ -58,18 +58,21 @@ export const useMqttStore = defineStore('mqtt', {
 					}, {});
 			};
 		},
-		// getGridId(state) {
-		// 	let hierarchy = state.topics["openWB/counter/get/hierarchy"];
-		// 	console.log("getGridId", hierarchy);
-		// 	if (hierarchy !== undefined) {
-		// 		let index = Object.keys(state.topics["openWB/counter/get/hierarchy"])[0];
-		// 		console.log("getGridId", index, state.topics["openWB/counter/get/hierarchy"][index]);
-		// 		if (state.topics["openWB/counter/get/hierarchy"][index].type == "counter") {
-		// 			return state.topics["openWB/counter/get/hierarchy"][index].id;
-		// 		}
-		// 	}
-		// 	return 0;
-		// },
+		/**
+		 * Parses the property "id" from the hierarchy root element.
+		 * @returns id of the root counter component or undefined if missing
+		 */
+		getGridId(state) {
+			let hierarchy = state.topics["openWB/counter/get/hierarchy"];
+			if (hierarchy !== undefined && Object.keys(hierarchy).length > 0) {
+				let index = Object.keys(state.topics["openWB/counter/get/hierarchy"])[0];
+				console.debug("getGridId", index, state.topics["openWB/counter/get/hierarchy"][index]);
+				if (state.topics["openWB/counter/get/hierarchy"][index].type == "counter") {
+					return state.topics["openWB/counter/get/hierarchy"][index].id;
+				}
+			}
+			return undefined;
+		},
 	},
 	actions: {
 		initTopic(topic, defaultValue = undefined) {
