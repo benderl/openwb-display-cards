@@ -1,6 +1,7 @@
 <script>
 import { useMqttStore } from "@/stores/mqtt.js";
 import DashBoardCard from "@/components/DashBoardCard.vue";
+import SparkLine from "@/components/SparkLine.vue";
 
 export default {
 	name: "DashBoard",
@@ -9,7 +10,7 @@ export default {
 			mqttStore: useMqttStore(),
 		};
 	},
-	components: { DashBoardCard },
+	components: { DashBoardCard, SparkLine },
 	computed: {
 		gridPower() {
 			let gridId = 0;
@@ -79,16 +80,22 @@ export default {
 			<template #headerValue>
 				{{ gridPower }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--danger)"
+				:data="[5, 7, 11, 13, 17, 29, 31, 3, 8]"
+			/>
 		</dash-board-card>
-		<dash-board-card color="dark">
+		<dash-board-card color="light">
 			<template #headerTitle>
 				Hausverbrauch
 			</template>
 			<template #headerValue>
 				{{ homePower }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--light)"
+				:data="[5, 7, 11, 13, 17, 19, 2, 3, 8]"
+			/>
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
 			<template #headerTitle>
@@ -97,7 +104,10 @@ export default {
 			<template #headerValue>
 				{{ batteryPower }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--warning)"
+				:data="[5, 7, 3, 8]"
+			/>
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
 			<template #headerTitle>
@@ -106,7 +116,10 @@ export default {
 			<template #headerValue>
 				{{ batterySoc }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--warning)"
+				:data="[5, 7, 11, 13, 17, 19, 23, 29, 31, 75, 100]"
+			/>
 		</dash-board-card>
 		<dash-board-card color="primary">
 			<template #headerTitle>
@@ -115,7 +128,10 @@ export default {
 			<template #headerValue>
 				{{ chargePointSumPower }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--primary)"
+				:data="[13, 17, 19, 23, 29, 31]"
+			/>
 		</dash-board-card>
 		<dash-board-card color="success" v-if="pvConfigured">
 			<template #headerTitle>
@@ -124,7 +140,10 @@ export default {
 			<template #headerValue>
 				{{ pvPower }}
 			</template>
-			Lade Daten
+			<spark-line
+				color="var(--color--success)"
+				:data="[5, 7, 11, 13, 17, 31, 3, 8]"
+			/>
 		</dash-board-card>
 	</div>
 </template>
