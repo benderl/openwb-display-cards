@@ -1,5 +1,6 @@
 <template>
 	<svg class="spark-line" :viewBox="`0 0 ${width} ${height}`" width="100%" height="100%" preserveAspectRatio="none">
+		<path class="zeroLine" :d="`M 0 ${zeroHeight} L ${width} ${zeroHeight}`" />
 		<rect
 			v-for="bar in bars"
 			:x="bar.x" :y="bar.y" :width="bar.width" :height="bar.height"
@@ -65,6 +66,10 @@ export default {
 <style scoped>
 svg {
 	transition: all 1s ease-in-out;
+}
+
+svg path.zeroLine {
+	stroke: v-bind(color);
 }
 
 svg rect {
