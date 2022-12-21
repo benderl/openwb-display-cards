@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useMqttStore = defineStore('mqtt', {
+export const useMqttStore = defineStore("mqtt", {
 	state: () => ({
 		topics: {},
 	}),
@@ -65,10 +65,20 @@ export const useMqttStore = defineStore('mqtt', {
 		getGridId(state) {
 			let hierarchy = state.topics["openWB/counter/get/hierarchy"];
 			if (hierarchy !== undefined && Object.keys(hierarchy).length > 0) {
-				let index = Object.keys(state.topics["openWB/counter/get/hierarchy"])[0];
-				console.debug("getGridId", index, state.topics["openWB/counter/get/hierarchy"][index]);
-				if (state.topics["openWB/counter/get/hierarchy"][index].type == "counter") {
-					return state.topics["openWB/counter/get/hierarchy"][index].id;
+				let index = Object.keys(
+					state.topics["openWB/counter/get/hierarchy"]
+				)[0];
+				console.debug(
+					"getGridId",
+					index,
+					state.topics["openWB/counter/get/hierarchy"][index]
+				);
+				if (
+					state.topics["openWB/counter/get/hierarchy"][index].type ==
+					"counter"
+				) {
+					return state.topics["openWB/counter/get/hierarchy"][index]
+						.id;
 				}
 			}
 			return undefined;
@@ -106,20 +116,16 @@ export const useMqttStore = defineStore('mqtt', {
 					.split(".")
 					.reduce(
 						(o, p, i) =>
-						(o[p] =
-							path.split(".").length === ++i
-								? value
-								: o[p] || {}),
+							(o[p] =
+								path.split(".").length === ++i
+									? value
+									: o[p] || {}),
 						object
 					);
 
 			if (topic in this.topics) {
 				if (objectPath != undefined) {
-					setPath(
-						this.topics[topic],
-						objectPath,
-						payload
-					);
+					setPath(this.topics[topic], objectPath, payload);
 				} else {
 					this.topics[topic] = payload;
 				}
@@ -131,5 +137,5 @@ export const useMqttStore = defineStore('mqtt', {
 			console.debug("updateState:", topic, value, objectPath);
 			this.updateTopic(topic, value, objectPath);
 		},
-	}
+	},
 });

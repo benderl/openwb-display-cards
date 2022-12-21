@@ -11,8 +11,17 @@ export default {
 	methods: {
 		update() {
 			const now = new Date();
-			const dateOptions = { weekday: "short", year: "numeric", month: "2-digit", day: "2-digit" };
-			const timeOptions = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+			const dateOptions = {
+				weekday: "short",
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			};
+			const timeOptions = {
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+			};
 			this.date = now.toLocaleDateString(undefined, dateOptions);
 			this.time = now.toLocaleTimeString(undefined, timeOptions);
 		},
@@ -24,7 +33,7 @@ export default {
 	beforeUnmount() {
 		clearInterval(this.dateTimeInterval);
 	},
-}
+};
 </script>
 
 <template>
@@ -38,6 +47,4 @@ export default {
 	</i-container>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

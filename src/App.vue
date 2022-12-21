@@ -9,6 +9,7 @@ import { useMqttStore } from "@/stores/mqtt.js";
 export default {
 	name: "openwbDisplayCardsApp",
 	components: {
+		RouterView,
 		DateTime,
 		NavBar,
 	},
@@ -118,7 +119,7 @@ export default {
 	beforeUnmount() {
 		this.doUnsubscribe(this.mqttTopicsToSubscribe);
 	},
-}
+};
 </script>
 
 <template>

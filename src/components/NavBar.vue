@@ -4,7 +4,7 @@ import NavItem from "@/components/NavItem.vue";
 export default {
 	name: "NavBar",
 	components: { NavItem },
-}
+};
 </script>
 
 <template>

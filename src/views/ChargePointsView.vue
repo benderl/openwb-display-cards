@@ -13,13 +13,18 @@ export default {
 	components: { DashBoardCard, SparkLine },
 	methods: {
 		getChargePointName(id) {
-			if (this.mqttStore.topics[`openWB/chargepoint/${id}/config`] !== undefined){
-				return this.mqttStore.topics[`openWB/chargepoint/${id}/config`].name.toString();
+			if (
+				this.mqttStore.topics[`openWB/chargepoint/${id}/config`] !==
+				undefined
+			) {
+				return this.mqttStore.topics[
+					`openWB/chargepoint/${id}/config`
+				].name.toString();
 			}
 			return "---";
 		},
 		getChargePointValue(id) {
-			return this.getValueString(`openWB/chargepoint/${id}/get/power`)
+			return this.getValueString(`openWB/chargepoint/${id}/get/power`);
 		},
 		getValueString(topic, unit = "W") {
 			var unitPrefix = "";
@@ -29,10 +34,16 @@ export default {
 			}
 			var textValue = value.toString();
 			if (value > 999 || value < -999) {
-				textValue = (value / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+				textValue = (value / 1000).toLocaleString(undefined, {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				});
 				unitPrefix = "k";
 				if (value > 999999 || value < -999999) {
-					textValue = (value / 1000000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+					textValue = (value / 1000000).toLocaleString(undefined, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
 					unitPrefix = "M";
 				}
 			}
@@ -46,7 +57,7 @@ export default {
 			return false;
 		},
 	},
-}
+};
 </script>
 
 <template>

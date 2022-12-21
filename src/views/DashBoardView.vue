@@ -51,10 +51,16 @@ export default {
 			}
 			var textValue = value.toString();
 			if (value > 999 || value < -999) {
-				textValue = (value / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+				textValue = (value / 1000).toLocaleString(undefined, {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2,
+				});
 				unitPrefix = "k";
 				if (value > 999999 || value < -999999) {
-					textValue = (value / 1000000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+					textValue = (value / 1000000).toLocaleString(undefined, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
 					unitPrefix = "M";
 				}
 			}
@@ -68,28 +74,27 @@ export default {
 			return false;
 		},
 	},
-}
+};
 </script>
 
 <template>
 	<div class="dash-board-card-wrapper">
 		<dash-board-card color="danger">
-			<template #headerTitle>
-				EVU
-			</template>
+			<template #headerTitle> EVU </template>
 			<template #headerValue>
 				{{ gridPower }}
 			</template>
 			<spark-line
 				color="var(--color--danger)"
 				colorNegative="var(--color--success)"
-				:data="[5, 7, 11, 13, 7, 2, -3, -13, 8]"
+				:data="[
+					5, -7, 11, 13, 7, 2, -3, -13, 8, 5, 7, 11, 13, 7, 2, -3,
+					-13, 8, 3, -10, 10,
+				]"
 			/>
 		</dash-board-card>
 		<dash-board-card color="light">
-			<template #headerTitle>
-				Hausverbrauch
-			</template>
+			<template #headerTitle> Hausverbrauch </template>
 			<template #headerValue>
 				{{ homePower }}
 			</template>
@@ -99,21 +104,14 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
-			<template #headerTitle>
-				Speicher
-			</template>
+			<template #headerTitle> Speicher </template>
 			<template #headerValue>
 				{{ batteryPower }}
 			</template>
-			<spark-line
-				color="var(--color--warning)"
-				:data="[5, 7, 3, 8]"
-			/>
+			<spark-line color="var(--color--warning)" :data="[5, 7, 4, 5, 8]" />
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
-			<template #headerTitle>
-				Speicher SoC
-			</template>
+			<template #headerTitle> Speicher SoC </template>
 			<template #headerValue>
 				{{ batterySoc }}
 			</template>
@@ -123,9 +121,7 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="primary">
-			<template #headerTitle>
-				Ladepunkte
-			</template>
+			<template #headerTitle> Ladepunkte </template>
 			<template #headerValue>
 				{{ chargePointSumPower }}
 			</template>
@@ -135,9 +131,7 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="success" v-if="pvConfigured">
-			<template #headerTitle>
-				PV
-			</template>
+			<template #headerTitle> PV </template>
 			<template #headerValue>
 				{{ pvPower }}
 			</template>

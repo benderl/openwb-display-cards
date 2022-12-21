@@ -4,7 +4,7 @@ export default {
 	props: {
 		color: String,
 	},
-}
+};
 </script>
 
 <template>
@@ -23,5 +23,4 @@ export default {
 	</i-card>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
