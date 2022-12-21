@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useMqttStore = defineStore("mqtt", {
 	state: () => ({
 		topics: {},
+		chartData: {},
 	}),
 	getters: {
 		getWildcardIndexList: (state) => {
@@ -92,9 +93,23 @@ export const useMqttStore = defineStore("mqtt", {
 				this.addTopic(topic, defaultValue);
 			}
 		},
+		/**
+		 * add topic with value "payload" to store
+		 * @param {String} topic the topic to create/update
+		 * @param {JSON} payload the new value as JSON object
+		 */
 		addTopic(topic, payload) {
 			console.debug("addTopic", topic, payload);
 			this.topics[topic] = payload;
+			// collect data for spark lines
+			if ((topic.endsWith("power") || topic.endsWith("soc")) && payload !== undefined) {
+				if (this.chartData[topic] === undefined) {
+					this.chartData[topic] = [];
+				}
+				this.chartData[topic].push(payload);
+				// limit memory usage and truncate chart data
+				this.chartData[topic].slice(-128);
+			}
 		},
 		removeTopic(topic) {
 			if (topic.includes("#") || topic.includes("+")) {
@@ -109,8 +124,13 @@ export const useMqttStore = defineStore("mqtt", {
 				delete this.topics[topic];
 			}
 		},
-		updateTopic(topic, payload, objectPath) {
-			// helper function to update nested objects py path
+		updateTopic(topic, payload, objectPath = undefined) {
+			/**
+			 * helper function to update nested objects py path
+			 * @param {Object} object object to update
+			 * @param {String} path path in object
+			 * @param {*} value new value to set
+			 */
 			const setPath = (object, path, value) =>
 				path
 					.split(".")
