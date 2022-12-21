@@ -102,7 +102,12 @@ export const useMqttStore = defineStore("mqtt", {
 			console.debug("addTopic", topic, payload);
 			this.topics[topic] = payload;
 			// collect data for spark lines
-			if ((topic.endsWith("power") || topic.endsWith("soc")) && payload !== undefined) {
+			if (
+				(topic.endsWith("home_consumption") ||
+					topic.endsWith("power") ||
+					topic.endsWith("soc")) &&
+				payload !== undefined
+			) {
 				if (this.chartData[topic] === undefined) {
 					this.chartData[topic] = [];
 				}
