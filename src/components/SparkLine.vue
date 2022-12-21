@@ -41,7 +41,7 @@ export default {
 	},
 	computed: {
 		highestPoint() {
-			return Math.max(0, Math.max.apply(null, this.slicedData));
+			return Math.max(1, Math.max.apply(null, this.slicedData));
 		},
 		lowestPoint() {
 			return Math.min(0, Math.min.apply(null, this.slicedData));
