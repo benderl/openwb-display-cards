@@ -1,10 +1,23 @@
 <template>
-	<svg class="spark-line" :viewBox="`0 0 ${width} ${height}`" width="100%" height="100%" preserveAspectRatio="none">
-		<path class="zeroLine" :d="`M 0 ${zeroHeight} L ${width} ${zeroHeight}`" />
+	<svg
+		class="spark-line"
+		:viewBox="`0 0 ${width} ${height}`"
+		width="100%"
+		height="100%"
+		preserveAspectRatio="none"
+	>
 		<rect
 			v-for="bar in bars"
-			:x="bar.x" :y="bar.y" :width="bar.width" :height="bar.height"
+			:key="bar.x"
+			:x="bar.x"
+			:y="bar.y"
+			:width="bar.width"
+			:height="bar.height"
 			:class="colorNegative && bar.negative ? 'negative' : ''"
+		/>
+		<path
+			class="zero-line"
+			:d="`M 0 ${zeroHeight} L ${width} ${zeroHeight}`"
 		/>
 	</svg>
 </template>
@@ -12,33 +25,50 @@
 <script>
 export default {
 	props: {
-		data: { required: true, type: Array, default: [] },
+		data: {
+			required: true,
+			type: Array,
+			default() {
+				return [];
+			},
+		},
 		width: { default: 300 },
 		height: { default: 50 },
-		stroke: { default: 2 },
+		gap: { default: 2 },
+		stroke: { default: 3 },
 		color: { String, default: "var(--color--primary)" },
-		colorNegative: { String, default: undefined},
-	},
-	data() {
-		return {};
+		colorNegative: { String, default: undefined },
 	},
 	computed: {
+		highestPoint() {
+			return Math.max(0, Math.max.apply(null, this.slicedData));
+		},
+		lowestPoint() {
+			return Math.min(0, Math.min.apply(null, this.slicedData));
+		},
+		maxPoints() {
+			return Math.floor(this.width / (this.stroke + this.gap));
+		},
+		slicedData() {
+			return this.data.slice(-this.maxPoints);
+		},
 		zeroHeight() {
-			const imageHeight = this.height - this.stroke * 2;
-			const highestPoint = Math.max.apply(null, this.data);
-			const lowestPoint = Math.min.apply(null, this.data);
-			return imageHeight - ((0 - lowestPoint) / (highestPoint - lowestPoint)) * imageHeight + this.stroke;
+			return (
+				this.height -
+				((0 - this.lowestPoint) /
+					(this.highestPoint - this.lowestPoint)) *
+					this.height
+			);
 		},
 		coordinates() {
-			const imageHeight = this.height - this.stroke * 2;
-			const highestPoint = Math.max.apply(null, this.data);
-			const lowestPoint = Math.min.apply(null, this.data);
 			const coordinateArray = [];
-			const totalPoints = this.data.length - 1;
-
-			this.data.forEach((item, n) => {
-				const x = (n / totalPoints) * (this.width - 2 * this.stroke) + this.stroke;
-				const y = imageHeight - ((item - lowestPoint) / (highestPoint - lowestPoint)) * imageHeight + this.stroke;
+			this.slicedData.forEach((item, n) => {
+				const x = (n * this.width) / this.maxPoints;
+				const y =
+					this.height -
+					((item - this.lowestPoint) /
+						(this.highestPoint - this.lowestPoint)) *
+						this.height;
 				coordinateArray.push({ x, y });
 			});
 			return coordinateArray;
@@ -46,13 +76,19 @@ export default {
 		bars() {
 			const barCoordinates = [];
 			this.coordinates.forEach((point) => {
-				const left = point.x - this.stroke / 2;
-				const y = point.y - this.stroke / 2;
+				const left = point.x;
+				const y = point.y;
 				const width = this.stroke;
 				const top = Math.min(y, this.zeroHeight);
 				const height = Math.abs(y - this.zeroHeight);
 				const isNegative = y > this.zeroHeight;
-				barCoordinates.push({x: left, y: top, width: width, height: height, negative: isNegative});
+				barCoordinates.push({
+					x: left,
+					y: top,
+					width: width,
+					height: height,
+					negative: isNegative,
+				});
 			});
 			return barCoordinates;
 		},
@@ -68,7 +104,7 @@ svg {
 	transition: all 1s ease-in-out;
 }
 
-svg path.zeroLine {
+svg path.zero-line {
 	stroke: v-bind(color);
 }
 
