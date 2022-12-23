@@ -129,9 +129,14 @@ export default {
 
 <template>
 	<i-layout vertical>
-		<i-layout-aside>
-			<DateTime />
-			<hr />
+		<i-layout-aside class="_position:fixed">
+			<i-container fluid class="_margin-bottom:1">
+				<i-row center>
+					<i-column>
+						<DateTime />
+					</i-column>
+				</i-row>
+			</i-container>
 			<NavBar />
 		</i-layout-aside>
 
@@ -144,6 +149,10 @@ export default {
 <style scoped>
 .layout-aside {
 	----width: 10rem !important;
+}
+
+.layout-content {
+	margin-left: calc(10rem + var(--spacing));
 	margin-right: var(--spacing);
 }
 

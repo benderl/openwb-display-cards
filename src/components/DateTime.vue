@@ -1,6 +1,9 @@
 <script>
 export default {
 	name: "DateTime",
+	props: {
+		separator: { String, default: "<br />" },
+	},
 	data() {
 		return {
 			dateTimeInterval: "",
@@ -36,15 +39,6 @@ export default {
 };
 </script>
 
-<template>
-	<i-container>
-		<i-row center>
-			{{ date }}
-		</i-row>
-		<i-row center>
-			{{ time }}
-		</i-row>
-	</i-container>
-</template>
+<template>{{ time }}<span v-html="separator" />{{ date }}</template>
 
 <style scoped></style>
