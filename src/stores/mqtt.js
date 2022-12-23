@@ -120,7 +120,10 @@ export const useMqttStore = defineStore("mqtt", {
 				if (inverted) {
 					value *= -1;
 				}
-				var textValue = value.toString();
+				var textValue = value.toLocaleString(undefined, {
+					minimumFractionDigits: 0,
+					maximumFractionDigits: 0,
+				});
 				if (value > 999 || value < -999) {
 					textValue = (value / 1000).toLocaleString(undefined, {
 						minimumFractionDigits: 2,

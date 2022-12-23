@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build --mode=development --debug",
-    "preview": "vite preview",
+    "build": "vite build",
+    "preview": "vite preview --host",
     "test:unit": "vitest run --environment jsdom --root src/",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "build-dev": "vite build --mode=development --out-dir=/var/www/html/openWB/web/display/openwb-display-cards --emptyOutDir",
+    "build-prod": "vite build --out-dir=/var/www/html/openWB/web/display/openwb-display-cards --emptyOutDir"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

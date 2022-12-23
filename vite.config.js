@@ -9,7 +9,7 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [vue(), nodePolyfills()],
-	base: "/openWB/web/display-cards/",
+	base: "/openWB/web/display/openwb-display-cards/",
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -31,7 +31,20 @@ export default defineConfig({
 		rollupOptions: {
 			plugins: [
 				rollupNodePolyFill(),
-			]
+			],
+			output: {
+				manualChunks(id) {
+					if (id.includes('node_modules')) {
+						if (id.includes('inkline')) {
+							return 'vendor-inkline';
+						}
+						if (id.includes('fortawesome')) {
+							return 'vendor-fortawesome';
+						}
+						return 'vendor';
+					}
+				}
+			}
 		}
 	}
 });
