@@ -3,8 +3,7 @@
 		class="spark-line"
 		:viewBox="`0 0 ${width} ${height}`"
 		width="100%"
-		height="100%"
-		preserveAspectRatio="none"
+		preserveAspectRatio="xMinYMin"
 	>
 		<rect
 			v-for="bar in bars"
@@ -32,19 +31,21 @@ export default {
 				return [];
 			},
 		},
-		width: { default: 300 },
-		height: { default: 50 },
-		gap: { default: 2 },
-		stroke: { default: 3 },
+		width: { Number, default: 250 },
+		height: { Number, default: 70 },
+		gap: { Number, default: 2 },
+		stroke: { Number, default: 3 },
+		min: { Number, default: 0 },
+		max: { Number, default: 1 },
 		color: { String, default: "var(--color--primary)" },
 		colorNegative: { String, default: undefined },
 	},
 	computed: {
 		highestPoint() {
-			return Math.max(1, Math.max.apply(null, this.slicedData));
+			return Math.max(1, this.max, ...this.slicedData);
 		},
 		lowestPoint() {
-			return Math.min(0, Math.min.apply(null, this.slicedData));
+			return Math.min(0, this.min, ...this.slicedData);
 		},
 		maxPoints() {
 			return Math.floor(this.width / (this.stroke + this.gap));

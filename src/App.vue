@@ -1,6 +1,7 @@
 <script>
 import { RouterView } from "vue-router";
 import mqtt from "mqtt";
+
 import DateTime from "@/components/DateTime.vue";
 import NavBar from "@/components/NavBar.vue";
 
@@ -39,6 +40,10 @@ export default {
 				"openWB/pv/config/configured",
 				"openWB/pv/get/power",
 				"openWB/chargepoint/+/get/power",
+				"openWB/chargepoint/+/get/plug_state",
+				"openWB/chargepoint/+/get/charge_state",
+				"openWB/chargepoint/+/get/phases_in_use",
+				"openWB/chargepoint/+/set/current",
 				"openWB/chargepoint/+/config",
 			],
 			mqttStore: useMqttStore(),

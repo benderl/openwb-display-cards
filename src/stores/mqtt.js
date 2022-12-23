@@ -20,7 +20,7 @@ export const useMqttStore = defineStore("mqtt", {
 						"$";
 				}
 				// filter and return all topics matching our regex
-				let myTopics = Object.keys(state.mqtt).filter((key) => {
+				let myTopics = Object.keys(state.topics).filter((key) => {
 					return key.match(baseTopicRegex);
 				});
 				myTopics.forEach((topic, index, array) => {
@@ -59,6 +59,23 @@ export const useMqttStore = defineStore("mqtt", {
 					}, {});
 			};
 		},
+		getObjectIds: (state) => {
+			return (type) => {
+				function getId(hierarchy) {
+					let result = [];
+					if (hierarchy !== undefined) {
+						hierarchy.forEach((element) => {
+							if (element.type == type) {
+								result.push(element.id);
+							}
+							result = [...result, ...getId(element.children)];
+						});
+					}
+					return result;
+				}
+				return getId(state.topics["openWB/counter/get/hierarchy"]);
+			};
+		},
 		/**
 		 * Parses the property "id" from the hierarchy root element.
 		 * @returns id of the root counter component or undefined if missing
@@ -83,6 +100,46 @@ export const useMqttStore = defineStore("mqtt", {
 				}
 			}
 			return undefined;
+		},
+		getValueBool: (state) => {
+			return (topic) => {
+				let value = state.topics[topic];
+				if (value !== undefined) {
+					return value;
+				}
+				return false;
+			};
+		},
+		getValueString: (state) => {
+			return (topic, unit = "W", inverted = false) => {
+				var unitPrefix = "";
+				var value = state.topics[topic];
+				if (value === undefined) {
+					return `--- ${unitPrefix}${unit}`;
+				}
+				if (inverted) {
+					value *= -1;
+				}
+				var textValue = value.toString();
+				if (value > 999 || value < -999) {
+					textValue = (value / 1000).toLocaleString(undefined, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
+					unitPrefix = "k";
+					if (value > 999999 || value < -999999) {
+						textValue = (value / 1000000).toLocaleString(
+							undefined,
+							{
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							}
+						);
+						unitPrefix = "M";
+					}
+				}
+				return `${textValue} ${unitPrefix}${unit}`;
+			};
 		},
 	},
 	actions: {

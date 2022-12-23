@@ -18,7 +18,10 @@ export default {
 			if (gridId === undefined) {
 				return "---";
 			}
-			return this.getValueString(`openWB/counter/${gridId}/get/power`);
+			return this.mqttStore.getValueString(
+				`openWB/counter/${gridId}/get/power`,
+				"W"
+			);
 		},
 		gridPowerChartData() {
 			let gridId = 0;
@@ -26,75 +29,61 @@ export default {
 			if (gridId === undefined) {
 				return [];
 			}
-			return this.mqttStore.chartData[`openWB/counter/${gridId}/get/power`];
+			return this.mqttStore.chartData[
+				`openWB/counter/${gridId}/get/power`
+			];
 		},
 		homePower() {
-			return this.getValueString("openWB/counter/set/home_consumption");
+			return this.mqttStore.getValueString(
+				"openWB/counter/set/home_consumption",
+				"W"
+			);
 		},
 		homePowerChartData() {
-			return this.mqttStore.chartData["openWB/counter/set/home_consumption"];
+			return this.mqttStore.chartData[
+				"openWB/counter/set/home_consumption"
+			];
 		},
 		batteryConfigured() {
-			return this.getValueBool("openWB/bat/config/configured");
+			return this.mqttStore.getValueBool("openWB/bat/config/configured");
 		},
 		batteryPower() {
-			return this.getValueString("openWB/bat/get/power");
+			return this.mqttStore.getValueString("openWB/bat/get/power", "W");
 		},
 		batteryPowerChartData() {
 			return this.mqttStore.chartData["openWB/bat/get/power"];
 		},
 		batterySoc() {
-			return this.getValueString("openWB/bat/get/soc", "%");
+			return this.mqttStore.getValueString("openWB/bat/get/soc", "%");
 		},
 		batterySocChartData() {
 			return this.mqttStore.chartData["openWB/bat/get/soc"];
 		},
 		chargePointSumPower() {
-			return this.getValueString("openWB/chargepoint/get/power");
+			return this.mqttStore.getValueString(
+				"openWB/chargepoint/get/power",
+				"W"
+			);
 		},
 		chargePointSumPowerChartData() {
 			return this.mqttStore.chartData["openWB/chargepoint/get/power"];
 		},
 		pvConfigured() {
-			return this.getValueBool("openWB/pv/config/configured");
+			return this.mqttStore.getValueBool("openWB/pv/config/configured");
 		},
 		pvPower() {
-			return this.getValueString("openWB/pv/get/power");
+			return this.mqttStore.getValueString(
+				"openWB/pv/get/power",
+				"W",
+				true
+			);
 		},
 		pvPowerChartData() {
-			return this.mqttStore.chartData["openWB/pv/get/power"];
-		},
-	},
-	methods: {
-		getValueString(topic, unit = "W") {
-			var unitPrefix = "";
-			var value = this.mqttStore.topics[topic];
-			if (value === undefined) {
-				return `--- ${unitPrefix}${unit}`;
-			}
-			var textValue = value.toString();
-			if (value > 999 || value < -999) {
-				textValue = (value / 1000).toLocaleString(undefined, {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				});
-				unitPrefix = "k";
-				if (value > 999999 || value < -999999) {
-					textValue = (value / 1000000).toLocaleString(undefined, {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					});
-					unitPrefix = "M";
+			return this.mqttStore.chartData["openWB/pv/get/power"].map(
+				(point) => {
+					return point * -1;
 				}
-			}
-			return `${textValue} ${unitPrefix}${unit}`;
-		},
-		getValueBool(topic) {
-			let value = this.mqttStore.topics[topic];
-			if (value !== undefined) {
-				return value;
-			}
-			return false;
+			);
 		},
 	},
 };
@@ -103,8 +92,8 @@ export default {
 <template>
 	<div class="dash-board-card-wrapper">
 		<dash-board-card color="danger">
-			<template #headerTitle> EVU </template>
-			<template #headerValue>
+			<template #headerLeft> EVU </template>
+			<template #headerRight>
 				{{ gridPower }}
 			</template>
 			<spark-line
@@ -114,8 +103,8 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="light">
-			<template #headerTitle> Hausverbrauch </template>
-			<template #headerValue>
+			<template #headerLeft> Hausverbrauch </template>
+			<template #headerRight>
 				{{ homePower }}
 			</template>
 			<spark-line
@@ -124,25 +113,30 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
-			<template #headerTitle> Speicher </template>
-			<template #headerValue>
+			<template #headerLeft> Speicher </template>
+			<template #headerRight>
 				{{ batteryPower }}
 			</template>
-			<spark-line color="var(--color--warning)" :data="batteryPowerChartData" />
+			<spark-line
+				color="var(--color--warning)"
+				:data="batteryPowerChartData"
+			/>
 		</dash-board-card>
 		<dash-board-card color="warning" v-if="batteryConfigured">
-			<template #headerTitle> Speicher SoC </template>
-			<template #headerValue>
+			<template #headerLeft> Speicher SoC </template>
+			<template #headerRight>
 				{{ batterySoc }}
 			</template>
 			<spark-line
 				color="var(--color--warning)"
 				:data="batterySocChartData"
+				:min="0"
+				:max="100"
 			/>
 		</dash-board-card>
 		<dash-board-card color="primary">
-			<template #headerTitle> Ladepunkte </template>
-			<template #headerValue>
+			<template #headerLeft> Ladepunkte </template>
+			<template #headerRight>
 				{{ chargePointSumPower }}
 			</template>
 			<spark-line
@@ -151,13 +145,14 @@ export default {
 			/>
 		</dash-board-card>
 		<dash-board-card color="success" v-if="pvConfigured">
-			<template #headerTitle> PV </template>
-			<template #headerValue>
+			<template #headerLeft> PV </template>
+			<template #headerRight>
 				{{ pvPower }}
 			</template>
 			<spark-line
 				color="var(--color--success)"
 				:data="pvPowerChartData"
+				:inverted="true"
 			/>
 		</dash-board-card>
 	</div>
