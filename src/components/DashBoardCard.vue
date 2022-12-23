@@ -10,14 +10,19 @@ export default {
 <template>
 	<i-card :color="color">
 		<template #header>
-			<div class="_display:flex _justify-content:space-between">
-				<div>
-					<slot name="headerTitle" />
-				</div>
-				<div>
-					<slot name="headerValue" />
-				</div>
-			</div>
+			<i-container>
+				<i-row>
+					<i-column>
+						<slot name="headerLeft" />
+					</i-column>
+					<i-column
+						v-if="$slots.headerRight"
+						class="_text-align:right"
+					>
+						<slot name="headerRight" />
+					</i-column>
+				</i-row>
+			</i-container>
 		</template>
 		<slot />
 	</i-card>
