@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 import nodePolyfills from "vite-plugin-node-stdlib-browser";
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -29,22 +29,20 @@ export default defineConfig({
 	},
 	build: {
 		rollupOptions: {
-			plugins: [
-				rollupNodePolyFill(),
-			],
+			plugins: [rollupNodePolyFill()],
 			output: {
 				manualChunks(id) {
-					if (id.includes('node_modules')) {
-						if (id.includes('inkline')) {
-							return 'vendor-inkline';
+					if (id.includes("node_modules")) {
+						if (id.includes("inkline")) {
+							return "vendor-inkline";
 						}
-						if (id.includes('fortawesome')) {
-							return 'vendor-fortawesome';
+						if (id.includes("fortawesome")) {
+							return "vendor-fortawesome";
 						}
-						return 'vendor';
+						return "vendor";
 					}
-				}
-			}
-		}
-	}
+				},
+			},
+		},
+	},
 });

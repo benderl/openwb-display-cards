@@ -13,7 +13,12 @@ import {
 	faWrench as fasWrench,
 } from "@fortawesome/free-solid-svg-icons";
 /* add icons to the library */
-library.add(fasPlugCircleXmark, fasPlugCircleCheck, fasPlugCircleBolt, fasWrench);
+library.add(
+	fasPlugCircleXmark,
+	fasPlugCircleCheck,
+	fasPlugCircleBolt,
+	fasWrench
+);
 
 export default {
 	name: "ChargePoints",
@@ -129,14 +134,19 @@ export default {
 					</i-column>
 					<i-column md="6">
 						<i-row>
-							<i-column>
-								Vehicle Data
-							</i-column>
+							<i-column> Vehicle Data </i-column>
 						</i-row>
 						<i-row>
 							<i-column>
-								<i-button block color="dark" @click="toggleChargePointSettings(id)">
-									<font-awesome-icon fixed-width :icon="['fas', 'fa-wrench']" />
+								<i-button
+									block
+									color="dark"
+									@click="toggleChargePointSettings(id)"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'fa-wrench']"
+									/>
 								</i-button>
 							</i-column>
 						</i-row>
