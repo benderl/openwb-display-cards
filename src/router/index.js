@@ -6,7 +6,7 @@ const router = createRouter({
 	routes: [
 		{
 			path: "/",
-			alias: ["/DashBoard", "/openWB/web/display/display.php"],
+			alias: "/DashBoard",
 			name: "dash-board",
 			component: DashBoardView,
 		},

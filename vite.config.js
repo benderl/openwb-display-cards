@@ -9,7 +9,7 @@ import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [vue(), nodePolyfills()],
-	base: "/openWB/web/display/openwb-display-cards/",
+	base: "/openWB/web/display/themes/cards/",
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
