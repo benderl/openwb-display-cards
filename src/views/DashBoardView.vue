@@ -168,7 +168,7 @@ export default {
 .card {
 	min-width: 15rem;
 	min-height: 130px;
-	flex: 16rem;
+	flex: 17rem;
 	----background: inherit !important;
 	----body--color: var(--contrast-color-for-dark-background) !important;
 }

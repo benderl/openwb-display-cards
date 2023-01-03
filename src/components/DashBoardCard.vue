@@ -28,4 +28,12 @@ export default {
 	</i-card>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+@import "@inkline/inkline/css/variables";
+@import "@inkline/inkline/css/mixins";
+
+@include i-column {
+	padding-left: 0;
+	padding-right: 0;
+}
+</style>
