@@ -1,14 +1,14 @@
 import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import Vue from "@vitejs/plugin-vue";
 
 import nodePolyfills from "vite-plugin-node-stdlib-browser";
 import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [vue(), nodePolyfills()],
+	plugins: [Vue(), { ...nodePolyfills(), apply: "build" }],
 	base: "/openWB/web/display/themes/cards/",
 	resolve: {
 		alias: {
